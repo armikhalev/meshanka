@@ -1,0 +1,41 @@
+
+-----------------------------------------------------------------
+  pg_upgrade run on Thu Sep  8 12:07:50 2022
+-----------------------------------------------------------------
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -l "pg_upgrade_server.log" -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "-p 50432 -b  -c listen_addresses='' -c unix_socket_permissions=0700 -c unix_socket_directories='/Users/megatron/Documents/clojure-land/meshanka'" start >> "pg_upgrade_server.log" 2>&1
+waiting for server to start....2022-09-08 12:07:51.444 EDT [48094] LOG:  starting PostgreSQL 14.5 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-09-08 12:07:51.444 EDT [48094] LOG:  listening on Unix socket "/Users/megatron/Documents/clojure-land/meshanka/.s.PGSQL.50432"
+2022-09-08 12:07:51.451 EDT [48095] LOG:  database system was shut down at 2022-09-08 12:04:00 EDT
+2022-09-08 12:07:51.470 EDT [48094] LOG:  database system is ready to accept connections
+ done
+server started
+
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "" -m smart stop >> "pg_upgrade_server.log" 2>&1
+waiting for server to shut down....2022-09-08 12:07:52.383 EDT [48094] LOG:  received smart shutdown request
+2022-09-08 12:07:52.385 EDT [48094] LOG:  background worker "logical replication launcher" (PID 48100) exited with exit code 1
+2022-09-08 12:07:52.385 EDT [48096] LOG:  shutting down
+2022-09-08 12:07:52.392 EDT [48094] LOG:  database system is shut down
+ done
+server stopped
+
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -l "pg_upgrade_server.log" -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "-p 50432 -b -c synchronous_commit=off -c fsync=off -c full_page_writes=off -c vacuum_defer_cleanup_age=0  -c listen_addresses='' -c unix_socket_permissions=0700 -c unix_socket_directories='/Users/megatron/Documents/clojure-land/meshanka'" start >> "pg_upgrade_server.log" 2>&1
+waiting for server to start....2022-09-08 12:07:52.517 EDT [48136] LOG:  starting PostgreSQL 14.5 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-09-08 12:07:52.518 EDT [48136] LOG:  listening on Unix socket "/Users/megatron/Documents/clojure-land/meshanka/.s.PGSQL.50432"
+2022-09-08 12:07:52.522 EDT [48137] LOG:  database system was shut down at 2022-09-08 12:07:52 EDT
+2022-09-08 12:07:52.526 EDT [48136] LOG:  database system is ready to accept connections
+ done
+server started
+
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "" -m smart stop >> "pg_upgrade_server.log" 2>&1
+waiting for server to shut down....2022-09-08 12:07:53.230 EDT [48136] LOG:  received smart shutdown request
+2022-09-08 12:07:53.231 EDT [48136] LOG:  background worker "logical replication launcher" (PID 48142) exited with exit code 1
+2022-09-08 12:07:53.232 EDT [48138] LOG:  shutting down
+2022-09-08 12:07:53.240 EDT [48136] LOG:  database system is shut down
+ done
+server stopped
+
+

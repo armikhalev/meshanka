@@ -1,0 +1,2439 @@
+
+-----------------------------------------------------------------
+  pg_upgrade run on Thu Sep  8 12:07:50 2022
+-----------------------------------------------------------------
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/pg_dumpall" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --globals-only --quote-all-identifiers --binary-upgrade --verbose -f pg_upgrade_dump_globals.sql >> "pg_upgrade_utility.log" 2>&1
+pg_dumpall: executing SELECT pg_catalog.set_config('search_path', '', false);
+pg_dumpall: executing SET quote_all_identifiers = true
+pg_dumpall: executing SELECT oid, rolname, rolsuper, rolinherit, rolcreaterole, rolcreatedb, rolcanlogin, rolconnlimit, rolpassword, rolvaliduntil, rolreplication, rolbypassrls, pg_catalog.shobj_description(oid, 'pg_authid') as rolcomment, rolname = current_user AS is_current_user FROM pg_authid WHERE rolname !~ '^pg_' ORDER BY 2
+pg_dumpall: executing SELECT provider, label FROM pg_catalog.pg_shseclabel WHERE classoid = 'pg_catalog.pg_authid'::pg_catalog.regclass AND objoid = '10'
+pg_dumpall: executing SELECT setconfig[1] FROM pg_db_role_setting WHERE setdatabase = 0 AND setrole = (SELECT oid FROM pg_authid WHERE rolname = 'megatron')
+pg_dumpall: executing SELECT ur.rolname AS roleid, um.rolname AS member, a.admin_option, ug.rolname AS grantor FROM pg_auth_members a LEFT JOIN pg_authid ur on ur.oid = a.roleid LEFT JOIN pg_authid um on um.oid = a.member LEFT JOIN pg_authid ug on ug.oid = a.grantor WHERE NOT (ur.rolname ~ '^pg_' AND um.rolname ~ '^pg_')ORDER BY 1,2,3
+pg_dumpall: executing SELECT oid, spcname, pg_catalog.pg_get_userbyid(spcowner) AS spcowner, pg_catalog.pg_tablespace_location(oid), (SELECT array_agg(acl ORDER BY row_n) FROM   (SELECT acl, row_n FROM      unnest(coalesce(spcacl,acldefault('t',spcowner)))      WITH ORDINALITY AS perm(acl,row_n)    WHERE NOT EXISTS (      SELECT 1      FROM unnest(acldefault('t',spcowner))        AS init(init_acl)      WHERE acl = init_acl)) AS spcacls)  AS spcacl, (SELECT array_agg(acl ORDER BY row_n) FROM   (SELECT acl, row_n FROM      unnest(acldefault('t',spcowner))      WITH ORDINALITY AS initp(acl,row_n)    WHERE NOT EXISTS (      SELECT 1      FROM unnest(coalesce(spcacl,acldefault('t',spcowner)))        AS permp(orig_acl)      WHERE acl = orig_acl)) AS rspcacls)  AS rspcacl, array_to_string(spcoptions, ', '),pg_catalog.shobj_description(oid, 'pg_tablespace') FROM pg_catalog.pg_tablespace WHERE spcname !~ '^pg_' ORDER BY 1
+
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/vacuumdb" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --all --analyze --verbose >> "pg_upgrade_utility.log" 2>&1
+vacuumdb: vacuuming database "postgres"
+INFO:  vacuuming "pg_catalog.pg_proc"
+INFO:  table "pg_proc": found 0 removable, 5 nonremovable row versions in 1 out of 94 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 733
+Skipped 0 pages due to buffer pins, 93 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1255"
+INFO:  table "pg_toast_1255": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 733
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_proc"
+INFO:  "pg_proc": scanned 94 of 94 pages, containing 3202 live rows and 0 dead rows; 3202 rows in sample, 3202 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_depend"
+INFO:  table "pg_depend": found 0 removable, 114 nonremovable row versions in 1 out of 65 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 734
+Skipped 0 pages due to buffer pins, 64 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_depend"
+INFO:  "pg_depend": scanned 65 of 65 pages, containing 8814 live rows and 0 dead rows; 8814 rows in sample, 8814 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_attribute"
+INFO:  table "pg_attribute": found 0 removable, 14 nonremovable row versions in 1 out of 55 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 735
+Skipped 0 pages due to buffer pins, 54 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_attribute"
+INFO:  "pg_attribute": scanned 55 of 55 pages, containing 2971 live rows and 0 dead rows; 2971 rows in sample, 2971 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_description"
+INFO:  table "pg_description": found 0 removable, 6 nonremovable row versions in 1 out of 44 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 736
+Skipped 0 pages due to buffer pins, 43 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2609"
+INFO:  table "pg_toast_2609": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 736
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_description"
+INFO:  "pg_description": scanned 44 of 44 pages, containing 5080 live rows and 0 dead rows; 5080 rows in sample, 5080 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_collation"
+INFO:  table "pg_collation": found 0 removable, 30 nonremovable row versions in 1 out of 33 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 737
+Skipped 0 pages due to buffer pins, 32 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3456"
+INFO:  table "pg_toast_3456": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 737
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_collation"
+INFO:  "pg_collation": scanned 33 of 33 pages, containing 1054 live rows and 0 dead rows; 1054 rows in sample, 1054 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_statistic"
+INFO:  scanned index "pg_statistic_relid_att_inh_index" to remove 76 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_statistic": removed 76 dead item identifiers in 11 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_statistic_relid_att_inh_index" now contains 406 row versions in 4 pages
+DETAIL:  31 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_statistic": found 75 removable, 406 nonremovable row versions in 24 out of 24 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 738
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2619"
+INFO:  scanned index "pg_toast_2619_index" to remove 9 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_toast_2619": removed 9 dead item identifiers in 2 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_toast_2619_index" now contains 12 row versions in 2 pages
+DETAIL:  9 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_toast_2619": found 9 removable, 12 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 738
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_catalog.pg_operator"
+INFO:  table "pg_operator": found 0 removable, 804 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 738
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_operator"
+INFO:  "pg_operator": scanned 14 of 14 pages, containing 804 live rows and 0 dead rows; 804 rows in sample, 804 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_type"
+INFO:  table "pg_type": found 0 removable, 601 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 739
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1247"
+INFO:  table "pg_toast_1247": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 739
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_type"
+INFO:  "pg_type": scanned 14 of 14 pages, containing 601 live rows and 0 dead rows; 601 rows in sample, 601 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_rewrite"
+INFO:  table "pg_rewrite": found 0 removable, 139 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 740
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2618"
+INFO:  table "pg_toast_2618": found 0 removable, 4 nonremovable row versions in 1 out of 63 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 740
+Skipped 0 pages due to buffer pins, 62 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_rewrite"
+INFO:  "pg_rewrite": scanned 13 of 13 pages, containing 139 live rows and 0 dead rows; 139 rows in sample, 139 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_class"
+INFO:  table "pg_class": found 0 removable, 396 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 741
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_class"
+INFO:  "pg_class": scanned 13 of 13 pages, containing 396 live rows and 0 dead rows; 396 rows in sample, 396 estimated total rows
+INFO:  vacuuming "information_schema.sql_features"
+INFO:  table "sql_features": found 0 removable, 713 nonremovable row versions in 8 out of 8 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 742
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13839"
+INFO:  table "pg_toast_13839": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 742
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_features"
+INFO:  "sql_features": scanned 8 of 8 pages, containing 713 live rows and 0 dead rows; 713 rows in sample, 713 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_amop"
+INFO:  table "pg_amop": found 0 removable, 945 nonremovable row versions in 7 out of 7 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 743
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_amop"
+INFO:  "pg_amop": scanned 7 of 7 pages, containing 945 live rows and 0 dead rows; 945 rows in sample, 945 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_amproc"
+INFO:  table "pg_amproc": found 0 removable, 697 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 744
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_amproc"
+INFO:  "pg_amproc": scanned 5 of 5 pages, containing 697 live rows and 0 dead rows; 697 rows in sample, 697 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_index"
+INFO:  table "pg_index": found 0 removable, 155 nonremovable row versions in 4 out of 4 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 745
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_index"
+INFO:  "pg_index": scanned 4 of 4 pages, containing 155 live rows and 0 dead rows; 155 rows in sample, 155 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_opclass"
+INFO:  table "pg_opclass": found 0 removable, 177 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 746
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_opclass"
+INFO:  "pg_opclass": scanned 3 of 3 pages, containing 177 live rows and 0 dead rows; 177 rows in sample, 177 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_init_privs"
+INFO:  table "pg_init_privs": found 0 removable, 199 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 747
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3394"
+INFO:  table "pg_toast_3394": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 747
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_init_privs"
+INFO:  "pg_init_privs": scanned 3 of 3 pages, containing 199 live rows and 0 dead rows; 199 rows in sample, 199 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_config_map"
+INFO:  table "pg_ts_config_map": found 0 removable, 551 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 748
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_config_map"
+INFO:  "pg_ts_config_map": scanned 3 of 3 pages, containing 551 live rows and 0 dead rows; 551 rows in sample, 551 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_constraint"
+INFO:  table "pg_constraint": found 0 removable, 107 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 749
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2606"
+INFO:  table "pg_toast_2606": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 749
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_constraint"
+INFO:  "pg_constraint": scanned 3 of 3 pages, containing 107 live rows and 0 dead rows; 107 rows in sample, 107 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_conversion"
+INFO:  table "pg_conversion": found 0 removable, 128 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 750
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_conversion"
+INFO:  "pg_conversion": scanned 2 of 2 pages, containing 128 live rows and 0 dead rows; 128 rows in sample, 128 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_cast"
+INFO:  table "pg_cast": found 0 removable, 230 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 751
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_cast"
+INFO:  "pg_cast": scanned 2 of 2 pages, containing 230 live rows and 0 dead rows; 230 rows in sample, 230 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_opfamily"
+INFO:  table "pg_opfamily": found 0 removable, 146 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 752
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_opfamily"
+INFO:  "pg_opfamily": scanned 2 of 2 pages, containing 146 live rows and 0 dead rows; 146 rows in sample, 146 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_aggregate"
+INFO:  table "pg_aggregate": found 0 removable, 145 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 753
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2600"
+INFO:  table "pg_toast_2600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 753
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_aggregate"
+INFO:  "pg_aggregate": scanned 2 of 2 pages, containing 145 live rows and 0 dead rows; 145 rows in sample, 145 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_dict"
+INFO:  table "pg_ts_dict": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 754
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3600"
+INFO:  table "pg_toast_3600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 754
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_dict"
+INFO:  "pg_ts_dict": scanned 1 of 1 pages, containing 29 live rows and 0 dead rows; 29 rows in sample, 29 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_authid"
+INFO:  table "pg_authid": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 755
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1260"
+INFO:  table "pg_toast_1260": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 755
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_authid"
+INFO:  "pg_authid": scanned 1 of 1 pages, containing 12 live rows and 0 dead rows; 12 rows in sample, 12 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_am"
+INFO:  table "pg_am": found 0 removable, 7 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 756
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_am"
+INFO:  "pg_am": scanned 1 of 1 pages, containing 7 live rows and 0 dead rows; 7 rows in sample, 7 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_language"
+INFO:  table "pg_language": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 757
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2612"
+INFO:  table "pg_toast_2612": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 757
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_language"
+INFO:  "pg_language": scanned 1 of 1 pages, containing 4 live rows and 0 dead rows; 4 rows in sample, 4 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_namespace"
+INFO:  table "pg_namespace": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 758
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2615"
+INFO:  table "pg_toast_2615": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 758
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_namespace"
+INFO:  "pg_namespace": scanned 1 of 1 pages, containing 4 live rows and 0 dead rows; 4 rows in sample, 4 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_database"
+INFO:  table "pg_database": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 759
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1262"
+INFO:  table "pg_toast_1262": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 759
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_database"
+INFO:  "pg_database": scanned 1 of 1 pages, containing 3 live rows and 0 dead rows; 3 rows in sample, 3 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_tablespace"
+INFO:  table "pg_tablespace": found 0 removable, 2 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 760
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1213"
+INFO:  table "pg_toast_1213": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 760
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_tablespace"
+INFO:  "pg_tablespace": scanned 1 of 1 pages, containing 2 live rows and 0 dead rows; 2 rows in sample, 2 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_auth_members"
+INFO:  table "pg_auth_members": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 761
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_auth_members"
+INFO:  "pg_auth_members": scanned 1 of 1 pages, containing 3 live rows and 0 dead rows; 3 rows in sample, 3 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_shdepend"
+INFO:  table "pg_shdepend": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 762
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_shdepend"
+INFO:  "pg_shdepend": scanned 1 of 1 pages, containing 12 live rows and 0 dead rows; 12 rows in sample, 12 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_shdescription"
+INFO:  table "pg_shdescription": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 763
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2396"
+INFO:  table "pg_toast_2396": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 763
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_shdescription"
+INFO:  "pg_shdescription": scanned 1 of 1 pages, containing 3 live rows and 0 dead rows; 3 rows in sample, 3 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_config"
+INFO:  table "pg_ts_config": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 764
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_config"
+INFO:  "pg_ts_config": scanned 1 of 1 pages, containing 29 live rows and 0 dead rows; 29 rows in sample, 29 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_parser"
+INFO:  table "pg_ts_parser": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 765
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_parser"
+INFO:  "pg_ts_parser": scanned 1 of 1 pages, containing 1 live rows and 0 dead rows; 1 rows in sample, 1 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_template"
+INFO:  table "pg_ts_template": found 0 removable, 5 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 766
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_template"
+INFO:  "pg_ts_template": scanned 1 of 1 pages, containing 5 live rows and 0 dead rows; 5 rows in sample, 5 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_extension"
+INFO:  table "pg_extension": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 767
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3079"
+INFO:  table "pg_toast_3079": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 767
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_extension"
+INFO:  "pg_extension": scanned 1 of 1 pages, containing 1 live rows and 0 dead rows; 1 rows in sample, 1 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_range"
+INFO:  table "pg_range": found 0 removable, 6 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 768
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_range"
+INFO:  "pg_range": scanned 1 of 1 pages, containing 6 live rows and 0 dead rows; 6 rows in sample, 6 estimated total rows
+INFO:  vacuuming "information_schema.sql_parts"
+INFO:  table "sql_parts": found 0 removable, 10 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 769
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13849"
+INFO:  table "pg_toast_13849": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 769
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_parts"
+INFO:  "sql_parts": scanned 1 of 1 pages, containing 10 live rows and 0 dead rows; 10 rows in sample, 10 estimated total rows
+INFO:  vacuuming "information_schema.sql_implementation_info"
+INFO:  table "sql_implementation_info": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 770
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13844"
+INFO:  table "pg_toast_13844": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 770
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_implementation_info"
+INFO:  "sql_implementation_info": scanned 1 of 1 pages, containing 12 live rows and 0 dead rows; 12 rows in sample, 12 estimated total rows
+INFO:  vacuuming "information_schema.sql_sizing"
+INFO:  table "sql_sizing": found 0 removable, 23 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 771
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13854"
+INFO:  table "pg_toast_13854": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 771
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_sizing"
+INFO:  "sql_sizing": scanned 1 of 1 pages, containing 23 live rows and 0 dead rows; 23 rows in sample, 23 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_attrdef"
+INFO:  table "pg_attrdef": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2604"
+INFO:  table "pg_toast_2604": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_attrdef"
+INFO:  "pg_attrdef": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_subscription"
+INFO:  table "pg_subscription": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_6100"
+INFO:  table "pg_toast_6100": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_subscription"
+INFO:  "pg_subscription": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_publication_rel"
+INFO:  table "pg_publication_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_publication_rel"
+INFO:  "pg_publication_rel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_subscription_rel"
+INFO:  table "pg_subscription_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_subscription_rel"
+INFO:  "pg_subscription_rel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_largeobject"
+INFO:  table "pg_largeobject": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_largeobject"
+INFO:  "pg_largeobject": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_foreign_data_wrapper"
+INFO:  table "pg_foreign_data_wrapper": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2328"
+INFO:  table "pg_toast_2328": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_foreign_data_wrapper"
+INFO:  "pg_foreign_data_wrapper": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_foreign_server"
+INFO:  table "pg_foreign_server": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1417"
+INFO:  table "pg_toast_1417": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_foreign_server"
+INFO:  "pg_foreign_server": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_policy"
+INFO:  table "pg_policy": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3256"
+INFO:  table "pg_toast_3256": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_policy"
+INFO:  "pg_policy": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_replication_origin"
+INFO:  table "pg_replication_origin": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_6000"
+INFO:  table "pg_toast_6000": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_replication_origin"
+INFO:  "pg_replication_origin": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_default_acl"
+INFO:  table "pg_default_acl": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_826"
+INFO:  table "pg_toast_826": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_default_acl"
+INFO:  "pg_default_acl": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_user_mapping"
+INFO:  table "pg_user_mapping": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1418"
+INFO:  table "pg_toast_1418": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_user_mapping"
+INFO:  "pg_user_mapping": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_seclabel"
+INFO:  table "pg_seclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3596"
+INFO:  table "pg_toast_3596": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_seclabel"
+INFO:  "pg_seclabel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_event_trigger"
+INFO:  table "pg_event_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3466"
+INFO:  table "pg_toast_3466": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_event_trigger"
+INFO:  "pg_event_trigger": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_trigger"
+INFO:  table "pg_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s.
+INFO:  vacuuming "pg_toast.pg_toast_2620"
+INFO:  table "pg_toast_2620": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_trigger"
+INFO:  "pg_trigger": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_statistic_ext"
+INFO:  table "pg_statistic_ext": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3381"
+INFO:  table "pg_toast_3381": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_statistic_ext"
+INFO:  "pg_statistic_ext": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_enum"
+INFO:  table "pg_enum": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s.
+INFO:  analyzing "pg_catalog.pg_enum"
+INFO:  "pg_enum": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_shseclabel"
+INFO:  table "pg_shseclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3592"
+INFO:  table "pg_toast_3592": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_shseclabel"
+INFO:  "pg_shseclabel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_largeobject_metadata"
+INFO:  table "pg_largeobject_metadata": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_largeobject_metadata"
+INFO:  "pg_largeobject_metadata": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_inherits"
+INFO:  table "pg_inherits": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_inherits"
+INFO:  "pg_inherits": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_statistic_ext_data"
+INFO:  table "pg_statistic_ext_data": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3429"
+INFO:  table "pg_toast_3429": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_statistic_ext_data"
+INFO:  "pg_statistic_ext_data": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_db_role_setting"
+INFO:  table "pg_db_role_setting": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2964"
+INFO:  table "pg_toast_2964": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_db_role_setting"
+INFO:  "pg_db_role_setting": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_partitioned_table"
+INFO:  table "pg_partitioned_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3350"
+INFO:  table "pg_toast_3350": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_partitioned_table"
+INFO:  "pg_partitioned_table": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_foreign_table"
+INFO:  table "pg_foreign_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3118"
+INFO:  table "pg_toast_3118": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_foreign_table"
+INFO:  "pg_foreign_table": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_transform"
+INFO:  table "pg_transform": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_transform"
+INFO:  "pg_transform": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_sequence"
+INFO:  table "pg_sequence": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_sequence"
+INFO:  "pg_sequence": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_publication"
+INFO:  table "pg_publication": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_publication"
+INFO:  "pg_publication": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+vacuumdb: vacuuming database "template1"
+INFO:  vacuuming "pg_catalog.pg_proc"
+INFO:  table "pg_proc": found 0 removable, 5 nonremovable row versions in 1 out of 94 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 93 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1255"
+INFO:  table "pg_toast_1255": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 772
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_proc"
+INFO:  "pg_proc": scanned 94 of 94 pages, containing 3202 live rows and 0 dead rows; 3202 rows in sample, 3202 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_depend"
+INFO:  table "pg_depend": found 0 removable, 114 nonremovable row versions in 1 out of 65 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 773
+Skipped 0 pages due to buffer pins, 64 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_depend"
+INFO:  "pg_depend": scanned 65 of 65 pages, containing 8814 live rows and 0 dead rows; 8814 rows in sample, 8814 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_attribute"
+INFO:  table "pg_attribute": found 0 removable, 14 nonremovable row versions in 1 out of 55 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 774
+Skipped 0 pages due to buffer pins, 54 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_attribute"
+INFO:  "pg_attribute": scanned 55 of 55 pages, containing 2971 live rows and 0 dead rows; 2971 rows in sample, 2971 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_description"
+INFO:  table "pg_description": found 0 removable, 6 nonremovable row versions in 1 out of 44 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 775
+Skipped 0 pages due to buffer pins, 43 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2609"
+INFO:  table "pg_toast_2609": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 775
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_description"
+INFO:  "pg_description": scanned 44 of 44 pages, containing 5080 live rows and 0 dead rows; 5080 rows in sample, 5080 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_collation"
+INFO:  table "pg_collation": found 0 removable, 30 nonremovable row versions in 1 out of 33 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 776
+Skipped 0 pages due to buffer pins, 32 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3456"
+INFO:  table "pg_toast_3456": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 776
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_collation"
+INFO:  "pg_collation": scanned 33 of 33 pages, containing 1054 live rows and 0 dead rows; 1054 rows in sample, 1054 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_statistic"
+INFO:  scanned index "pg_statistic_relid_att_inh_index" to remove 76 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_statistic": removed 76 dead item identifiers in 11 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_statistic_relid_att_inh_index" now contains 406 row versions in 4 pages
+DETAIL:  31 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_statistic": found 75 removable, 406 nonremovable row versions in 24 out of 24 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 777
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2619"
+INFO:  scanned index "pg_toast_2619_index" to remove 9 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_toast_2619": removed 9 dead item identifiers in 2 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_toast_2619_index" now contains 12 row versions in 2 pages
+DETAIL:  9 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_toast_2619": found 9 removable, 12 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 777
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_catalog.pg_operator"
+INFO:  table "pg_operator": found 0 removable, 804 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 777
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_operator"
+INFO:  "pg_operator": scanned 14 of 14 pages, containing 804 live rows and 0 dead rows; 804 rows in sample, 804 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_type"
+INFO:  table "pg_type": found 0 removable, 601 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 778
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1247"
+INFO:  table "pg_toast_1247": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 778
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_type"
+INFO:  "pg_type": scanned 14 of 14 pages, containing 601 live rows and 0 dead rows; 601 rows in sample, 601 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_rewrite"
+INFO:  table "pg_rewrite": found 0 removable, 139 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 779
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2618"
+INFO:  table "pg_toast_2618": found 0 removable, 4 nonremovable row versions in 1 out of 63 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 779
+Skipped 0 pages due to buffer pins, 62 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_rewrite"
+INFO:  "pg_rewrite": scanned 13 of 13 pages, containing 139 live rows and 0 dead rows; 139 rows in sample, 139 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_class"
+INFO:  table "pg_class": found 0 removable, 396 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 780
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_class"
+INFO:  "pg_class": scanned 13 of 13 pages, containing 396 live rows and 0 dead rows; 396 rows in sample, 396 estimated total rows
+INFO:  vacuuming "information_schema.sql_features"
+INFO:  table "sql_features": found 0 removable, 713 nonremovable row versions in 8 out of 8 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 781
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13839"
+INFO:  table "pg_toast_13839": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 781
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_features"
+INFO:  "sql_features": scanned 8 of 8 pages, containing 713 live rows and 0 dead rows; 713 rows in sample, 713 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_amop"
+INFO:  table "pg_amop": found 0 removable, 945 nonremovable row versions in 7 out of 7 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 782
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_amop"
+INFO:  "pg_amop": scanned 7 of 7 pages, containing 945 live rows and 0 dead rows; 945 rows in sample, 945 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_amproc"
+INFO:  table "pg_amproc": found 0 removable, 697 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 783
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_amproc"
+INFO:  "pg_amproc": scanned 5 of 5 pages, containing 697 live rows and 0 dead rows; 697 rows in sample, 697 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_index"
+INFO:  table "pg_index": found 0 removable, 155 nonremovable row versions in 4 out of 4 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 784
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_index"
+INFO:  "pg_index": scanned 4 of 4 pages, containing 155 live rows and 0 dead rows; 155 rows in sample, 155 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_opclass"
+INFO:  table "pg_opclass": found 0 removable, 177 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 785
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_opclass"
+INFO:  "pg_opclass": scanned 3 of 3 pages, containing 177 live rows and 0 dead rows; 177 rows in sample, 177 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_init_privs"
+INFO:  table "pg_init_privs": found 0 removable, 199 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 786
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3394"
+INFO:  table "pg_toast_3394": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 786
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_init_privs"
+INFO:  "pg_init_privs": scanned 3 of 3 pages, containing 199 live rows and 0 dead rows; 199 rows in sample, 199 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_config_map"
+INFO:  table "pg_ts_config_map": found 0 removable, 551 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 787
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_config_map"
+INFO:  "pg_ts_config_map": scanned 3 of 3 pages, containing 551 live rows and 0 dead rows; 551 rows in sample, 551 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_constraint"
+INFO:  table "pg_constraint": found 0 removable, 107 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 788
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2606"
+INFO:  table "pg_toast_2606": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 788
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_constraint"
+INFO:  "pg_constraint": scanned 3 of 3 pages, containing 107 live rows and 0 dead rows; 107 rows in sample, 107 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_conversion"
+INFO:  table "pg_conversion": found 0 removable, 128 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 789
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_conversion"
+INFO:  "pg_conversion": scanned 2 of 2 pages, containing 128 live rows and 0 dead rows; 128 rows in sample, 128 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_cast"
+INFO:  table "pg_cast": found 0 removable, 230 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 790
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_cast"
+INFO:  "pg_cast": scanned 2 of 2 pages, containing 230 live rows and 0 dead rows; 230 rows in sample, 230 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_opfamily"
+INFO:  table "pg_opfamily": found 0 removable, 146 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 791
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_opfamily"
+INFO:  "pg_opfamily": scanned 2 of 2 pages, containing 146 live rows and 0 dead rows; 146 rows in sample, 146 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_aggregate"
+INFO:  table "pg_aggregate": found 0 removable, 145 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 792
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2600"
+INFO:  table "pg_toast_2600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 792
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_aggregate"
+INFO:  "pg_aggregate": scanned 2 of 2 pages, containing 145 live rows and 0 dead rows; 145 rows in sample, 145 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_dict"
+INFO:  table "pg_ts_dict": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 793
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3600"
+INFO:  table "pg_toast_3600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 793
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_dict"
+INFO:  "pg_ts_dict": scanned 1 of 1 pages, containing 29 live rows and 0 dead rows; 29 rows in sample, 29 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_authid"
+INFO:  table "pg_authid": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 794
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1260"
+INFO:  table "pg_toast_1260": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 794
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_authid"
+INFO:  "pg_authid": scanned 1 of 1 pages, containing 12 live rows and 0 dead rows; 12 rows in sample, 12 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_am"
+INFO:  table "pg_am": found 0 removable, 7 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 795
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_am"
+INFO:  "pg_am": scanned 1 of 1 pages, containing 7 live rows and 0 dead rows; 7 rows in sample, 7 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_language"
+INFO:  table "pg_language": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 796
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2612"
+INFO:  table "pg_toast_2612": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 796
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_language"
+INFO:  "pg_language": scanned 1 of 1 pages, containing 4 live rows and 0 dead rows; 4 rows in sample, 4 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_namespace"
+INFO:  table "pg_namespace": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 797
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2615"
+INFO:  table "pg_toast_2615": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 797
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_namespace"
+INFO:  "pg_namespace": scanned 1 of 1 pages, containing 4 live rows and 0 dead rows; 4 rows in sample, 4 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_database"
+INFO:  table "pg_database": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 798
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1262"
+INFO:  table "pg_toast_1262": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 798
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_database"
+INFO:  "pg_database": scanned 1 of 1 pages, containing 3 live rows and 0 dead rows; 3 rows in sample, 3 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_tablespace"
+INFO:  table "pg_tablespace": found 0 removable, 2 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 799
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1213"
+INFO:  table "pg_toast_1213": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 799
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_tablespace"
+INFO:  "pg_tablespace": scanned 1 of 1 pages, containing 2 live rows and 0 dead rows; 2 rows in sample, 2 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_auth_members"
+INFO:  table "pg_auth_members": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 800
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_auth_members"
+INFO:  "pg_auth_members": scanned 1 of 1 pages, containing 3 live rows and 0 dead rows; 3 rows in sample, 3 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_shdepend"
+INFO:  table "pg_shdepend": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 801
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_shdepend"
+INFO:  "pg_shdepend": scanned 1 of 1 pages, containing 12 live rows and 0 dead rows; 12 rows in sample, 12 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_shdescription"
+INFO:  table "pg_shdescription": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 802
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2396"
+INFO:  table "pg_toast_2396": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 802
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_shdescription"
+INFO:  "pg_shdescription": scanned 1 of 1 pages, containing 3 live rows and 0 dead rows; 3 rows in sample, 3 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_config"
+INFO:  table "pg_ts_config": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 803
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_config"
+INFO:  "pg_ts_config": scanned 1 of 1 pages, containing 29 live rows and 0 dead rows; 29 rows in sample, 29 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_parser"
+INFO:  table "pg_ts_parser": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 804
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_parser"
+INFO:  "pg_ts_parser": scanned 1 of 1 pages, containing 1 live rows and 0 dead rows; 1 rows in sample, 1 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_ts_template"
+INFO:  table "pg_ts_template": found 0 removable, 5 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 805
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_ts_template"
+INFO:  "pg_ts_template": scanned 1 of 1 pages, containing 5 live rows and 0 dead rows; 5 rows in sample, 5 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_extension"
+INFO:  table "pg_extension": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 806
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3079"
+INFO:  table "pg_toast_3079": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 806
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_extension"
+INFO:  "pg_extension": scanned 1 of 1 pages, containing 1 live rows and 0 dead rows; 1 rows in sample, 1 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_range"
+INFO:  table "pg_range": found 0 removable, 6 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 807
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_range"
+INFO:  "pg_range": scanned 1 of 1 pages, containing 6 live rows and 0 dead rows; 6 rows in sample, 6 estimated total rows
+INFO:  vacuuming "information_schema.sql_parts"
+INFO:  table "sql_parts": found 0 removable, 10 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 808
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13849"
+INFO:  table "pg_toast_13849": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 808
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_parts"
+INFO:  "sql_parts": scanned 1 of 1 pages, containing 10 live rows and 0 dead rows; 10 rows in sample, 10 estimated total rows
+INFO:  vacuuming "information_schema.sql_implementation_info"
+INFO:  table "sql_implementation_info": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 809
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13844"
+INFO:  table "pg_toast_13844": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 809
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_implementation_info"
+INFO:  "sql_implementation_info": scanned 1 of 1 pages, containing 12 live rows and 0 dead rows; 12 rows in sample, 12 estimated total rows
+INFO:  vacuuming "information_schema.sql_sizing"
+INFO:  table "sql_sizing": found 0 removable, 23 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 810
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_13854"
+INFO:  table "pg_toast_13854": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 810
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "information_schema.sql_sizing"
+INFO:  "sql_sizing": scanned 1 of 1 pages, containing 23 live rows and 0 dead rows; 23 rows in sample, 23 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_attrdef"
+INFO:  table "pg_attrdef": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2604"
+INFO:  table "pg_toast_2604": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_attrdef"
+INFO:  "pg_attrdef": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_subscription"
+INFO:  table "pg_subscription": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_6100"
+INFO:  table "pg_toast_6100": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_subscription"
+INFO:  "pg_subscription": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_publication_rel"
+INFO:  table "pg_publication_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_publication_rel"
+INFO:  "pg_publication_rel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_subscription_rel"
+INFO:  table "pg_subscription_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_subscription_rel"
+INFO:  "pg_subscription_rel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_largeobject"
+INFO:  table "pg_largeobject": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_largeobject"
+INFO:  "pg_largeobject": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_foreign_data_wrapper"
+INFO:  table "pg_foreign_data_wrapper": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2328"
+INFO:  table "pg_toast_2328": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_foreign_data_wrapper"
+INFO:  "pg_foreign_data_wrapper": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_foreign_server"
+INFO:  table "pg_foreign_server": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1417"
+INFO:  table "pg_toast_1417": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_foreign_server"
+INFO:  "pg_foreign_server": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_policy"
+INFO:  table "pg_policy": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3256"
+INFO:  table "pg_toast_3256": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_policy"
+INFO:  "pg_policy": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_replication_origin"
+INFO:  table "pg_replication_origin": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_6000"
+INFO:  table "pg_toast_6000": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_replication_origin"
+INFO:  "pg_replication_origin": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_default_acl"
+INFO:  table "pg_default_acl": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_826"
+INFO:  table "pg_toast_826": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_default_acl"
+INFO:  "pg_default_acl": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_user_mapping"
+INFO:  table "pg_user_mapping": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_1418"
+INFO:  table "pg_toast_1418": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_user_mapping"
+INFO:  "pg_user_mapping": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_seclabel"
+INFO:  table "pg_seclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3596"
+INFO:  table "pg_toast_3596": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_seclabel"
+INFO:  "pg_seclabel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_event_trigger"
+INFO:  table "pg_event_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3466"
+INFO:  table "pg_toast_3466": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_event_trigger"
+INFO:  "pg_event_trigger": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_trigger"
+INFO:  table "pg_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2620"
+INFO:  table "pg_toast_2620": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_trigger"
+INFO:  "pg_trigger": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_statistic_ext"
+INFO:  table "pg_statistic_ext": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3381"
+INFO:  table "pg_toast_3381": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_statistic_ext"
+INFO:  "pg_statistic_ext": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_enum"
+INFO:  table "pg_enum": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_enum"
+INFO:  "pg_enum": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_shseclabel"
+INFO:  table "pg_shseclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3592"
+INFO:  table "pg_toast_3592": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_shseclabel"
+INFO:  "pg_shseclabel": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_largeobject_metadata"
+INFO:  table "pg_largeobject_metadata": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_largeobject_metadata"
+INFO:  "pg_largeobject_metadata": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_inherits"
+INFO:  table "pg_inherits": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_inherits"
+INFO:  "pg_inherits": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_statistic_ext_data"
+INFO:  table "pg_statistic_ext_data": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3429"
+INFO:  table "pg_toast_3429": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_statistic_ext_data"
+INFO:  "pg_statistic_ext_data": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_db_role_setting"
+INFO:  table "pg_db_role_setting": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_2964"
+INFO:  table "pg_toast_2964": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_db_role_setting"
+INFO:  "pg_db_role_setting": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_partitioned_table"
+INFO:  table "pg_partitioned_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3350"
+INFO:  table "pg_toast_3350": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_partitioned_table"
+INFO:  "pg_partitioned_table": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_foreign_table"
+INFO:  table "pg_foreign_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  vacuuming "pg_toast.pg_toast_3118"
+INFO:  table "pg_toast_3118": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_foreign_table"
+INFO:  "pg_foreign_table": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_transform"
+INFO:  table "pg_transform": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_transform"
+INFO:  "pg_transform": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_sequence"
+INFO:  table "pg_sequence": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_sequence"
+INFO:  "pg_sequence": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+INFO:  vacuuming "pg_catalog.pg_publication"
+INFO:  table "pg_publication": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  analyzing "pg_catalog.pg_publication"
+INFO:  "pg_publication": scanned 0 of 0 pages, containing 0 live rows and 0 dead rows; 0 rows in sample, 0 estimated total rows
+
+
+command: "/Applications/Postgres.app/Contents/Versions/14/bin/vacuumdb" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --all --freeze --verbose >> "pg_upgrade_utility.log" 2>&1
+vacuumdb: vacuuming database "postgres"
+INFO:  aggressively vacuuming "pg_catalog.pg_proc"
+INFO:  table "pg_proc": found 0 removable, 5 nonremovable row versions in 1 out of 94 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 93 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1255"
+INFO:  table "pg_toast_1255": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_depend"
+INFO:  table "pg_depend": found 0 removable, 114 nonremovable row versions in 1 out of 65 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 64 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_attribute"
+INFO:  table "pg_attribute": found 0 removable, 14 nonremovable row versions in 1 out of 55 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 54 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_description"
+INFO:  table "pg_description": found 0 removable, 6 nonremovable row versions in 1 out of 44 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 43 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2609"
+INFO:  table "pg_toast_2609": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_collation"
+INFO:  table "pg_collation": found 0 removable, 30 nonremovable row versions in 1 out of 33 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 32 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3456"
+INFO:  table "pg_toast_3456": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_statistic"
+INFO:  scanned index "pg_statistic_relid_att_inh_index" to remove 189 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_statistic": removed 189 dead item identifiers in 17 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_statistic_relid_att_inh_index" now contains 406 row versions in 5 pages
+DETAIL:  189 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_statistic": found 112 removable, 406 nonremovable row versions in 28 out of 28 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2619"
+INFO:  scanned index "pg_toast_2619_index" to remove 3 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_toast_2619": removed 3 dead item identifiers in 1 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_toast_2619_index" now contains 12 row versions in 2 pages
+DETAIL:  3 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_toast_2619": found 3 removable, 12 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_operator"
+INFO:  table "pg_operator": found 0 removable, 804 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_type"
+INFO:  table "pg_type": found 0 removable, 601 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1247"
+INFO:  table "pg_toast_1247": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_rewrite"
+INFO:  table "pg_rewrite": found 0 removable, 139 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2618"
+INFO:  table "pg_toast_2618": found 0 removable, 4 nonremovable row versions in 1 out of 63 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 62 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_class"
+INFO:  table "pg_class": found 0 removable, 396 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_features"
+INFO:  table "sql_features": found 0 removable, 713 nonremovable row versions in 8 out of 8 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13839"
+INFO:  table "pg_toast_13839": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_amop"
+INFO:  table "pg_amop": found 0 removable, 945 nonremovable row versions in 7 out of 7 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_amproc"
+INFO:  table "pg_amproc": found 0 removable, 697 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_index"
+INFO:  table "pg_index": found 0 removable, 155 nonremovable row versions in 4 out of 4 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_opclass"
+INFO:  table "pg_opclass": found 0 removable, 177 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_init_privs"
+INFO:  table "pg_init_privs": found 0 removable, 199 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3394"
+INFO:  table "pg_toast_3394": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_config_map"
+INFO:  table "pg_ts_config_map": found 0 removable, 551 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_constraint"
+INFO:  table "pg_constraint": found 0 removable, 107 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2606"
+INFO:  table "pg_toast_2606": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_conversion"
+INFO:  table "pg_conversion": found 0 removable, 128 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_cast"
+INFO:  table "pg_cast": found 0 removable, 230 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_opfamily"
+INFO:  table "pg_opfamily": found 0 removable, 146 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_aggregate"
+INFO:  table "pg_aggregate": found 0 removable, 145 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2600"
+INFO:  table "pg_toast_2600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_dict"
+INFO:  table "pg_ts_dict": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3600"
+INFO:  table "pg_toast_3600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_authid"
+INFO:  table "pg_authid": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1260"
+INFO:  table "pg_toast_1260": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_am"
+INFO:  table "pg_am": found 0 removable, 7 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_language"
+INFO:  table "pg_language": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2612"
+INFO:  table "pg_toast_2612": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_namespace"
+INFO:  table "pg_namespace": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2615"
+INFO:  table "pg_toast_2615": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_database"
+INFO:  table "pg_database": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1262"
+INFO:  table "pg_toast_1262": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_tablespace"
+INFO:  table "pg_tablespace": found 0 removable, 2 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1213"
+INFO:  table "pg_toast_1213": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_auth_members"
+INFO:  table "pg_auth_members": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_shdepend"
+INFO:  table "pg_shdepend": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_shdescription"
+INFO:  table "pg_shdescription": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2396"
+INFO:  table "pg_toast_2396": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_config"
+INFO:  table "pg_ts_config": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_parser"
+INFO:  table "pg_ts_parser": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_template"
+INFO:  table "pg_ts_template": found 0 removable, 5 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_extension"
+INFO:  table "pg_extension": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3079"
+INFO:  table "pg_toast_3079": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_range"
+INFO:  table "pg_range": found 0 removable, 6 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_parts"
+INFO:  table "sql_parts": found 0 removable, 10 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13849"
+INFO:  table "pg_toast_13849": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_implementation_info"
+INFO:  table "sql_implementation_info": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13844"
+INFO:  table "pg_toast_13844": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_sizing"
+INFO:  table "sql_sizing": found 0 removable, 23 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13854"
+INFO:  table "pg_toast_13854": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_attrdef"
+INFO:  table "pg_attrdef": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2604"
+INFO:  table "pg_toast_2604": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_subscription"
+INFO:  table "pg_subscription": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_6100"
+INFO:  table "pg_toast_6100": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_publication_rel"
+INFO:  table "pg_publication_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_subscription_rel"
+INFO:  table "pg_subscription_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_largeobject"
+INFO:  table "pg_largeobject": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_foreign_data_wrapper"
+INFO:  table "pg_foreign_data_wrapper": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2328"
+INFO:  table "pg_toast_2328": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_foreign_server"
+INFO:  table "pg_foreign_server": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1417"
+INFO:  table "pg_toast_1417": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_policy"
+INFO:  table "pg_policy": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3256"
+INFO:  table "pg_toast_3256": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_replication_origin"
+INFO:  table "pg_replication_origin": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_6000"
+INFO:  table "pg_toast_6000": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_default_acl"
+INFO:  table "pg_default_acl": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_826"
+INFO:  table "pg_toast_826": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_user_mapping"
+INFO:  table "pg_user_mapping": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1418"
+INFO:  table "pg_toast_1418": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_seclabel"
+INFO:  table "pg_seclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3596"
+INFO:  table "pg_toast_3596": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_event_trigger"
+INFO:  table "pg_event_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3466"
+INFO:  table "pg_toast_3466": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_trigger"
+INFO:  table "pg_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2620"
+INFO:  table "pg_toast_2620": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_statistic_ext"
+INFO:  table "pg_statistic_ext": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3381"
+INFO:  table "pg_toast_3381": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_enum"
+INFO:  table "pg_enum": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_shseclabel"
+INFO:  table "pg_shseclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3592"
+INFO:  table "pg_toast_3592": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_largeobject_metadata"
+INFO:  table "pg_largeobject_metadata": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_inherits"
+INFO:  table "pg_inherits": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_statistic_ext_data"
+INFO:  table "pg_statistic_ext_data": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3429"
+INFO:  table "pg_toast_3429": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_db_role_setting"
+INFO:  table "pg_db_role_setting": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2964"
+INFO:  table "pg_toast_2964": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_partitioned_table"
+INFO:  table "pg_partitioned_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3350"
+INFO:  table "pg_toast_3350": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_foreign_table"
+INFO:  table "pg_foreign_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3118"
+INFO:  table "pg_toast_3118": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_transform"
+INFO:  table "pg_transform": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_sequence"
+INFO:  table "pg_sequence": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_publication"
+INFO:  table "pg_publication": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+vacuumdb: vacuuming database "template1"
+INFO:  aggressively vacuuming "pg_catalog.pg_proc"
+INFO:  table "pg_proc": found 0 removable, 5 nonremovable row versions in 1 out of 94 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 93 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1255"
+INFO:  table "pg_toast_1255": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_depend"
+INFO:  table "pg_depend": found 0 removable, 114 nonremovable row versions in 1 out of 65 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 64 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_attribute"
+INFO:  table "pg_attribute": found 0 removable, 14 nonremovable row versions in 1 out of 55 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 54 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_description"
+INFO:  table "pg_description": found 0 removable, 6 nonremovable row versions in 1 out of 44 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 43 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2609"
+INFO:  table "pg_toast_2609": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_collation"
+INFO:  table "pg_collation": found 0 removable, 30 nonremovable row versions in 1 out of 33 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 32 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3456"
+INFO:  table "pg_toast_3456": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_statistic"
+INFO:  scanned index "pg_statistic_relid_att_inh_index" to remove 189 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_statistic": removed 189 dead item identifiers in 17 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_statistic_relid_att_inh_index" now contains 406 row versions in 5 pages
+DETAIL:  189 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_statistic": found 112 removable, 406 nonremovable row versions in 28 out of 28 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2619"
+INFO:  scanned index "pg_toast_2619_index" to remove 3 row versions
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  table "pg_toast_2619": removed 3 dead item identifiers in 1 pages
+DETAIL:  CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  index "pg_toast_2619_index" now contains 12 row versions in 2 pages
+DETAIL:  3 index row versions were removed.
+0 index pages were newly deleted.
+0 index pages are currently deleted, of which 0 are currently reusable.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  table "pg_toast_2619": found 3 removable, 12 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_operator"
+INFO:  table "pg_operator": found 0 removable, 804 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_type"
+INFO:  table "pg_type": found 0 removable, 601 nonremovable row versions in 14 out of 14 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1247"
+INFO:  table "pg_toast_1247": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_rewrite"
+INFO:  table "pg_rewrite": found 0 removable, 139 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2618"
+INFO:  table "pg_toast_2618": found 0 removable, 4 nonremovable row versions in 1 out of 63 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 62 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_class"
+INFO:  table "pg_class": found 0 removable, 396 nonremovable row versions in 13 out of 13 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_features"
+INFO:  table "sql_features": found 0 removable, 713 nonremovable row versions in 8 out of 8 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13839"
+INFO:  table "pg_toast_13839": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_amop"
+INFO:  table "pg_amop": found 0 removable, 945 nonremovable row versions in 7 out of 7 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_amproc"
+INFO:  table "pg_amproc": found 0 removable, 697 nonremovable row versions in 5 out of 5 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_index"
+INFO:  table "pg_index": found 0 removable, 155 nonremovable row versions in 4 out of 4 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_opclass"
+INFO:  table "pg_opclass": found 0 removable, 177 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_init_privs"
+INFO:  table "pg_init_privs": found 0 removable, 199 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3394"
+INFO:  table "pg_toast_3394": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_config_map"
+INFO:  table "pg_ts_config_map": found 0 removable, 551 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_constraint"
+INFO:  table "pg_constraint": found 0 removable, 107 nonremovable row versions in 3 out of 3 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2606"
+INFO:  table "pg_toast_2606": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_conversion"
+INFO:  table "pg_conversion": found 0 removable, 128 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_cast"
+INFO:  table "pg_cast": found 0 removable, 230 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_opfamily"
+INFO:  table "pg_opfamily": found 0 removable, 146 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_aggregate"
+INFO:  table "pg_aggregate": found 0 removable, 145 nonremovable row versions in 2 out of 2 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2600"
+INFO:  table "pg_toast_2600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_dict"
+INFO:  table "pg_ts_dict": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3600"
+INFO:  table "pg_toast_3600": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_authid"
+INFO:  table "pg_authid": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1260"
+INFO:  table "pg_toast_1260": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_am"
+INFO:  table "pg_am": found 0 removable, 7 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_language"
+INFO:  table "pg_language": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2612"
+INFO:  table "pg_toast_2612": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_namespace"
+INFO:  table "pg_namespace": found 0 removable, 4 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2615"
+INFO:  table "pg_toast_2615": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_database"
+INFO:  table "pg_database": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1262"
+INFO:  table "pg_toast_1262": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_tablespace"
+INFO:  table "pg_tablespace": found 0 removable, 2 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1213"
+INFO:  table "pg_toast_1213": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_auth_members"
+INFO:  table "pg_auth_members": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_shdepend"
+INFO:  table "pg_shdepend": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_shdescription"
+INFO:  table "pg_shdescription": found 0 removable, 3 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2396"
+INFO:  table "pg_toast_2396": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_config"
+INFO:  table "pg_ts_config": found 0 removable, 29 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_parser"
+INFO:  table "pg_ts_parser": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_ts_template"
+INFO:  table "pg_ts_template": found 0 removable, 5 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_extension"
+INFO:  table "pg_extension": found 0 removable, 1 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3079"
+INFO:  table "pg_toast_3079": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_range"
+INFO:  table "pg_range": found 0 removable, 6 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_parts"
+INFO:  table "sql_parts": found 0 removable, 10 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13849"
+INFO:  table "pg_toast_13849": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_implementation_info"
+INFO:  table "sql_implementation_info": found 0 removable, 12 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13844"
+INFO:  table "pg_toast_13844": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "information_schema.sql_sizing"
+INFO:  table "sql_sizing": found 0 removable, 23 nonremovable row versions in 1 out of 1 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_13854"
+INFO:  table "pg_toast_13854": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_attrdef"
+INFO:  table "pg_attrdef": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2604"
+INFO:  table "pg_toast_2604": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_subscription"
+INFO:  table "pg_subscription": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_6100"
+INFO:  table "pg_toast_6100": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_publication_rel"
+INFO:  table "pg_publication_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_subscription_rel"
+INFO:  table "pg_subscription_rel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_largeobject"
+INFO:  table "pg_largeobject": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_foreign_data_wrapper"
+INFO:  table "pg_foreign_data_wrapper": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2328"
+INFO:  table "pg_toast_2328": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_foreign_server"
+INFO:  table "pg_foreign_server": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1417"
+INFO:  table "pg_toast_1417": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_policy"
+INFO:  table "pg_policy": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3256"
+INFO:  table "pg_toast_3256": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_replication_origin"
+INFO:  table "pg_replication_origin": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_6000"
+INFO:  table "pg_toast_6000": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_default_acl"
+INFO:  table "pg_default_acl": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_826"
+INFO:  table "pg_toast_826": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_user_mapping"
+INFO:  table "pg_user_mapping": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_1418"
+INFO:  table "pg_toast_1418": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_seclabel"
+INFO:  table "pg_seclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3596"
+INFO:  table "pg_toast_3596": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_event_trigger"
+INFO:  table "pg_event_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3466"
+INFO:  table "pg_toast_3466": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_trigger"
+INFO:  table "pg_trigger": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2620"
+INFO:  table "pg_toast_2620": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_statistic_ext"
+INFO:  table "pg_statistic_ext": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3381"
+INFO:  table "pg_toast_3381": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_enum"
+INFO:  table "pg_enum": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_shseclabel"
+INFO:  table "pg_shseclabel": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3592"
+INFO:  table "pg_toast_3592": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_largeobject_metadata"
+INFO:  table "pg_largeobject_metadata": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_inherits"
+INFO:  table "pg_inherits": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_statistic_ext_data"
+INFO:  table "pg_statistic_ext_data": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3429"
+INFO:  table "pg_toast_3429": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_db_role_setting"
+INFO:  table "pg_db_role_setting": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_2964"
+INFO:  table "pg_toast_2964": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_partitioned_table"
+INFO:  table "pg_partitioned_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3350"
+INFO:  table "pg_toast_3350": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_foreign_table"
+INFO:  table "pg_foreign_table": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_toast.pg_toast_3118"
+INFO:  table "pg_toast_3118": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_transform"
+INFO:  table "pg_transform": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_sequence"
+INFO:  table "pg_sequence": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+INFO:  aggressively vacuuming "pg_catalog.pg_publication"
+INFO:  table "pg_publication": found 0 removable, 0 nonremovable row versions in 0 out of 0 pages
+DETAIL:  0 dead row versions cannot be removed yet, oldest xmin: 811
+Skipped 0 pages due to buffer pins, 0 frozen pages.
+CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s.
+
+
+command: cp -Rf "/Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact" "/Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact" >> "pg_upgrade_utility.log" 2>&1
+cp: /Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact: No such file or directory

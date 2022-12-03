@@ -1,0 +1,181 @@
+Running in verbose mode
+
+-----------------------------------------------------------------
+  pg_upgrade run on Thu Sep  8 12:07:50 2022
+-----------------------------------------------------------------
+
+Performing Consistency Checks
+-----------------------------
+Checking cluster versions                                   ok
+Current pg_control values:
+
+pg_control version number:            1300
+Catalog version number:               202107181
+Database system identifier:           7141040429744741260
+Latest checkpoint's TimeLineID:       1
+Latest checkpoint's full_page_writes: on
+Latest checkpoint's NextXID:          0:733
+Latest checkpoint's NextOID:          14022
+Latest checkpoint's NextMultiXactId:  1
+Latest checkpoint's NextMultiOffset:  0
+Latest checkpoint's oldestXID:        726
+Latest checkpoint's oldestXID's DB:   1
+Latest checkpoint's oldestActiveXID:  0
+Latest checkpoint's oldestMultiXid:   1
+Latest checkpoint's oldestMulti's DB: 1
+Latest checkpoint's oldestCommitTsXid:0
+Latest checkpoint's newestCommitTsXid:0
+Maximum data alignment:               8
+Database block size:                  8192
+Blocks per segment of large relation: 131072
+WAL block size:                       8192
+Bytes per WAL segment:                16777216
+Maximum length of identifiers:        64
+Maximum columns in an index:          32
+Maximum size of a TOAST chunk:        1996
+Size of a large-object chunk:         2048
+Date/time type storage:               64-bit integers
+Float8 argument passing:              by value
+Data page checksum version:           0
+
+
+Values to be changed:
+
+First log segment after reset:        000000010000000000000002
+Current pg_control values:
+
+pg_control version number:            1300
+Catalog version number:               202107181
+Database system identifier:           7141040429744741260
+Latest checkpoint's TimeLineID:       1
+Latest checkpoint's full_page_writes: on
+Latest checkpoint's NextXID:          0:733
+Latest checkpoint's NextOID:          14022
+Latest checkpoint's NextMultiXactId:  1
+Latest checkpoint's NextMultiOffset:  0
+Latest checkpoint's oldestXID:        726
+Latest checkpoint's oldestXID's DB:   1
+Latest checkpoint's oldestActiveXID:  0
+Latest checkpoint's oldestMultiXid:   1
+Latest checkpoint's oldestMulti's DB: 1
+Latest checkpoint's oldestCommitTsXid:0
+Latest checkpoint's newestCommitTsXid:0
+Maximum data alignment:               8
+Database block size:                  8192
+Blocks per segment of large relation: 131072
+WAL block size:                       8192
+Bytes per WAL segment:                16777216
+Maximum length of identifiers:        64
+Maximum columns in an index:          32
+Maximum size of a TOAST chunk:        1996
+Size of a large-object chunk:         2048
+Date/time type storage:               64-bit integers
+Float8 argument passing:              by value
+Data page checksum version:           0
+
+
+Values to be changed:
+
+First log segment after reset:        000000010000000000000002
+"/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -l "pg_upgrade_server.log" -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "-p 50432 -b  -c listen_addresses='' -c unix_socket_permissions=0700 -c unix_socket_directories='/Users/megatron/Documents/clojure-land/meshanka'" start >> "pg_upgrade_server.log" 2>&1
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: SELECT d.oid, d.datname, d.encoding, d.datcollate, d.datctype, pg_catalog.pg_tablespace_location(t.oid) AS spclocation FROM pg_catalog.pg_database d  LEFT OUTER JOIN pg_catalog.pg_tablespace t  ON d.dattablespace = t.oid WHERE d.datallowconn = true ORDER BY 2
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH regular_heap (reloid, indtable, toastheap) AS (   SELECT c.oid, 0::oid, 0::oid   FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n          ON c.relnamespace = n.oid   WHERE relkind IN ('r', 'm') AND     ((n.nspname !~ '^pg_temp_' AND       n.nspname !~ '^pg_toast_temp_' AND       n.nspname NOT IN ('pg_catalog', 'information_schema',                         'binary_upgrade', 'pg_toast') AND       c.oid >= 16384::pg_catalog.oid) OR      (n.nspname = 'pg_catalog' AND       relname IN ('pg_largeobject') ))),   toast_heap (reloid, indtable, toastheap) AS (   SELECT c.reltoastrelid, 0::oid, c.oid   FROM regular_heap JOIN pg_catalog.pg_class c       ON regular_heap.reloid = c.oid   WHERE c.reltoastrelid != 0),   all_index (reloid, indtable, toastheap) AS (   SELECT indexrelid, indrelid, 0::oid   FROM pg_catalog.pg_index   WHERE indisvalid AND indisready     AND indrelid IN         (SELECT reloid FROM regular_heap          UNION ALL          SELECT reloid FROM toast_heap)) SELECT all_rels.*, n.nspname, c.relname,   c.relfilenode, c.reltablespace, pg_catalog.pg_tablespace_location(t.oid) AS spclocation FROM (SELECT * FROM regular_heap       UNION ALL       SELECT * FROM toast_heap       UNION ALL       SELECT * FROM all_index) all_rels   JOIN pg_catalog.pg_class c       ON all_rels.reloid = c.oid   JOIN pg_catalog.pg_namespace n      ON c.relnamespace = n.oid   LEFT OUTER JOIN pg_catalog.pg_tablespace t      ON c.reltablespace = t.oid ORDER BY 1;
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH regular_heap (reloid, indtable, toastheap) AS (   SELECT c.oid, 0::oid, 0::oid   FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n          ON c.relnamespace = n.oid   WHERE relkind IN ('r', 'm') AND     ((n.nspname !~ '^pg_temp_' AND       n.nspname !~ '^pg_toast_temp_' AND       n.nspname NOT IN ('pg_catalog', 'information_schema',                         'binary_upgrade', 'pg_toast') AND       c.oid >= 16384::pg_catalog.oid) OR      (n.nspname = 'pg_catalog' AND       relname IN ('pg_largeobject') ))),   toast_heap (reloid, indtable, toastheap) AS (   SELECT c.reltoastrelid, 0::oid, c.oid   FROM regular_heap JOIN pg_catalog.pg_class c       ON regular_heap.reloid = c.oid   WHERE c.reltoastrelid != 0),   all_index (reloid, indtable, toastheap) AS (   SELECT indexrelid, indrelid, 0::oid   FROM pg_catalog.pg_index   WHERE indisvalid AND indisready     AND indrelid IN         (SELECT reloid FROM regular_heap          UNION ALL          SELECT reloid FROM toast_heap)) SELECT all_rels.*, n.nspname, c.relname,   c.relfilenode, c.reltablespace, pg_catalog.pg_tablespace_location(t.oid) AS spclocation FROM (SELECT * FROM regular_heap       UNION ALL       SELECT * FROM toast_heap       UNION ALL       SELECT * FROM all_index) all_rels   JOIN pg_catalog.pg_class c       ON all_rels.reloid = c.oid   JOIN pg_catalog.pg_namespace n      ON c.relnamespace = n.oid   LEFT OUTER JOIN pg_catalog.pg_tablespace t      ON c.reltablespace = t.oid ORDER BY 1;
+
+source databases:
+Database: postgres
+relname: pg_catalog.pg_largeobject: reloid: 2613 reltblspace: 
+relname: pg_catalog.pg_largeobject_loid_pn_index: reloid: 2683 reltblspace: 
+
+
+Database: template1
+relname: pg_catalog.pg_largeobject: reloid: 2613 reltblspace: 
+relname: pg_catalog.pg_largeobject_loid_pn_index: reloid: 2683 reltblspace: 
+
+
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: SELECT	pg_catalog.pg_tablespace_location(oid) AS spclocation FROM	pg_catalog.pg_tablespace WHERE	spcname != 'pg_default' AND 		spcname != 'pg_global'
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: SELECT DISTINCT probin FROM pg_catalog.pg_proc WHERE prolang = 13 AND probin IS NOT NULL AND oid >= 16384;
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: SELECT DISTINCT probin FROM pg_catalog.pg_proc WHERE prolang = 13 AND probin IS NOT NULL AND oid >= 16384;
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+Checking database user is the install user                  executing: SELECT rolsuper, oid FROM pg_catalog.pg_roles WHERE rolname = current_user AND rolname !~ '^pg_'
+executing: SELECT COUNT(*) FROM pg_catalog.pg_roles WHERE rolname !~ '^pg_'
+ok
+Checking database connection settings                       executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: SELECT	datname, datallowconn FROM	pg_catalog.pg_database
+ok
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+Checking for prepared transactions                          executing: SELECT * FROM pg_catalog.pg_prepared_xacts
+ok
+Checking for system-defined composite types in user tables  executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH RECURSIVE oids AS ( 	SELECT t.oid FROM pg_catalog.pg_type t LEFT JOIN pg_catalog.pg_namespace n ON t.typnamespace = n.oid  WHERE typtype = 'c' AND (t.oid < 16384 OR nspname = 'information_schema') 	UNION ALL 	SELECT * FROM ( 		WITH x AS (SELECT oid FROM oids) 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typbasetype = x.oid AND typtype = 'd' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typelem = x.oid AND typtype = 'b' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_class c, pg_catalog.pg_attribute a, x 			WHERE t.typtype = 'c' AND 				  t.oid = c.reltype AND 				  c.oid = a.attrelid AND 				  NOT a.attisdropped AND 				  a.atttypid = x.oid 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_range r, x 			WHERE t.typtype = 'r' AND r.rngtypid = t.oid AND r.rngsubtype = x.oid	) foo ) SELECT n.nspname, c.relname, a.attname FROM	pg_catalog.pg_class c, 		pg_catalog.pg_namespace n, 		pg_catalog.pg_attribute a WHERE	c.oid = a.attrelid AND 		NOT a.attisdropped AND 		a.atttypid IN (SELECT oid FROM oids) AND 		c.relkind IN ('r', 'm', 'i') AND 		c.relnamespace = n.oid AND 		n.nspname !~ '^pg_temp_' AND 		n.nspname !~ '^pg_toast_temp_' AND 		n.nspname NOT IN ('pg_catalog', 'information_schema')
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH RECURSIVE oids AS ( 	SELECT t.oid FROM pg_catalog.pg_type t LEFT JOIN pg_catalog.pg_namespace n ON t.typnamespace = n.oid  WHERE typtype = 'c' AND (t.oid < 16384 OR nspname = 'information_schema') 	UNION ALL 	SELECT * FROM ( 		WITH x AS (SELECT oid FROM oids) 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typbasetype = x.oid AND typtype = 'd' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typelem = x.oid AND typtype = 'b' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_class c, pg_catalog.pg_attribute a, x 			WHERE t.typtype = 'c' AND 				  t.oid = c.reltype AND 				  c.oid = a.attrelid AND 				  NOT a.attisdropped AND 				  a.atttypid = x.oid 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_range r, x 			WHERE t.typtype = 'r' AND r.rngtypid = t.oid AND r.rngsubtype = x.oid	) foo ) SELECT n.nspname, c.relname, a.attname FROM	pg_catalog.pg_class c, 		pg_catalog.pg_namespace n, 		pg_catalog.pg_attribute a WHERE	c.oid = a.attrelid AND 		NOT a.attisdropped AND 		a.atttypid IN (SELECT oid FROM oids) AND 		c.relkind IN ('r', 'm', 'i') AND 		c.relnamespace = n.oid AND 		n.nspname !~ '^pg_temp_' AND 		n.nspname !~ '^pg_toast_temp_' AND 		n.nspname NOT IN ('pg_catalog', 'information_schema')
+ok
+Checking for reg* data types in user tables                 executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH RECURSIVE oids AS ( 	SELECT oid FROM pg_catalog.pg_type t WHERE t.typnamespace =         (SELECT oid FROM pg_catalog.pg_namespace          WHERE nspname = 'pg_catalog')   AND t.typname IN (            'regcollation',            'regconfig',            'regdictionary',            'regnamespace',            'regoper',            'regoperator',            'regproc',            'regprocedure'          ) 	UNION ALL 	SELECT * FROM ( 		WITH x AS (SELECT oid FROM oids) 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typbasetype = x.oid AND typtype = 'd' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typelem = x.oid AND typtype = 'b' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_class c, pg_catalog.pg_attribute a, x 			WHERE t.typtype = 'c' AND 				  t.oid = c.reltype AND 				  c.oid = a.attrelid AND 				  NOT a.attisdropped AND 				  a.atttypid = x.oid 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_range r, x 			WHERE t.typtype = 'r' AND r.rngtypid = t.oid AND r.rngsubtype = x.oid	) foo ) SELECT n.nspname, c.relname, a.attname FROM	pg_catalog.pg_class c, 		pg_catalog.pg_namespace n, 		pg_catalog.pg_attribute a WHERE	c.oid = a.attrelid AND 		NOT a.attisdropped AND 		a.atttypid IN (SELECT oid FROM oids) AND 		c.relkind IN ('r', 'm', 'i') AND 		c.relnamespace = n.oid AND 		n.nspname !~ '^pg_temp_' AND 		n.nspname !~ '^pg_toast_temp_' AND 		n.nspname NOT IN ('pg_catalog', 'information_schema')
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH RECURSIVE oids AS ( 	SELECT oid FROM pg_catalog.pg_type t WHERE t.typnamespace =         (SELECT oid FROM pg_catalog.pg_namespace          WHERE nspname = 'pg_catalog')   AND t.typname IN (            'regcollation',            'regconfig',            'regdictionary',            'regnamespace',            'regoper',            'regoperator',            'regproc',            'regprocedure'          ) 	UNION ALL 	SELECT * FROM ( 		WITH x AS (SELECT oid FROM oids) 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typbasetype = x.oid AND typtype = 'd' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, x WHERE typelem = x.oid AND typtype = 'b' 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_class c, pg_catalog.pg_attribute a, x 			WHERE t.typtype = 'c' AND 				  t.oid = c.reltype AND 				  c.oid = a.attrelid AND 				  NOT a.attisdropped AND 				  a.atttypid = x.oid 			UNION ALL 			SELECT t.oid FROM pg_catalog.pg_type t, pg_catalog.pg_range r, x 			WHERE t.typtype = 'r' AND r.rngtypid = t.oid AND r.rngsubtype = x.oid	) foo ) SELECT n.nspname, c.relname, a.attname FROM	pg_catalog.pg_class c, 		pg_catalog.pg_namespace n, 		pg_catalog.pg_attribute a WHERE	c.oid = a.attrelid AND 		NOT a.attisdropped AND 		a.atttypid IN (SELECT oid FROM oids) AND 		c.relkind IN ('r', 'm', 'i') AND 		c.relnamespace = n.oid AND 		n.nspname !~ '^pg_temp_' AND 		n.nspname !~ '^pg_toast_temp_' AND 		n.nspname NOT IN ('pg_catalog', 'information_schema')
+ok
+Checking for contrib/isn with bigint-passing mismatch       ok
+Creating dump of global objects                             "/Applications/Postgres.app/Contents/Versions/14/bin/pg_dumpall" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --globals-only --quote-all-identifiers --binary-upgrade --verbose -f pg_upgrade_dump_globals.sql >> "pg_upgrade_utility.log" 2>&1
+ok
+Creating dump of database schemas
+  postgres
+"/Applications/Postgres.app/Contents/Versions/14/bin/pg_dump" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --schema-only --quote-all-identifiers --binary-upgrade --format=custom --verbose --file="pg_upgrade_dump_14021.custom" 'dbname=postgres' >> "pg_upgrade_dump_14021.log" 2>&1
+  template1
+"/Applications/Postgres.app/Contents/Versions/14/bin/pg_dump" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --schema-only --quote-all-identifiers --binary-upgrade --format=custom --verbose --file="pg_upgrade_dump_1.custom" 'dbname=template1' >> "pg_upgrade_dump_1.log" 2>&1
+                                                            ok
+"/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "" -m smart stop >> "pg_upgrade_server.log" 2>&1
+"/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -l "pg_upgrade_server.log" -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "-p 50432 -b -c synchronous_commit=off -c fsync=off -c full_page_writes=off -c vacuum_defer_cleanup_age=0  -c listen_addresses='' -c unix_socket_permissions=0700 -c unix_socket_directories='/Users/megatron/Documents/clojure-land/meshanka'" start >> "pg_upgrade_server.log" 2>&1
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: SELECT d.oid, d.datname, d.encoding, d.datcollate, d.datctype, pg_catalog.pg_tablespace_location(t.oid) AS spclocation FROM pg_catalog.pg_database d  LEFT OUTER JOIN pg_catalog.pg_tablespace t  ON d.dattablespace = t.oid WHERE d.datallowconn = true ORDER BY 2
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH regular_heap (reloid, indtable, toastheap) AS (   SELECT c.oid, 0::oid, 0::oid   FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n          ON c.relnamespace = n.oid   WHERE relkind IN ('r', 'm') AND     ((n.nspname !~ '^pg_temp_' AND       n.nspname !~ '^pg_toast_temp_' AND       n.nspname NOT IN ('pg_catalog', 'information_schema',                         'binary_upgrade', 'pg_toast') AND       c.oid >= 16384::pg_catalog.oid) OR      (n.nspname = 'pg_catalog' AND       relname IN ('pg_largeobject') ))),   toast_heap (reloid, indtable, toastheap) AS (   SELECT c.reltoastrelid, 0::oid, c.oid   FROM regular_heap JOIN pg_catalog.pg_class c       ON regular_heap.reloid = c.oid   WHERE c.reltoastrelid != 0),   all_index (reloid, indtable, toastheap) AS (   SELECT indexrelid, indrelid, 0::oid   FROM pg_catalog.pg_index   WHERE indisvalid AND indisready     AND indrelid IN         (SELECT reloid FROM regular_heap          UNION ALL          SELECT reloid FROM toast_heap)) SELECT all_rels.*, n.nspname, c.relname,   c.relfilenode, c.reltablespace, pg_catalog.pg_tablespace_location(t.oid) AS spclocation FROM (SELECT * FROM regular_heap       UNION ALL       SELECT * FROM toast_heap       UNION ALL       SELECT * FROM all_index) all_rels   JOIN pg_catalog.pg_class c       ON all_rels.reloid = c.oid   JOIN pg_catalog.pg_namespace n      ON c.relnamespace = n.oid   LEFT OUTER JOIN pg_catalog.pg_tablespace t      ON c.reltablespace = t.oid ORDER BY 1;
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+executing: WITH regular_heap (reloid, indtable, toastheap) AS (   SELECT c.oid, 0::oid, 0::oid   FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n          ON c.relnamespace = n.oid   WHERE relkind IN ('r', 'm') AND     ((n.nspname !~ '^pg_temp_' AND       n.nspname !~ '^pg_toast_temp_' AND       n.nspname NOT IN ('pg_catalog', 'information_schema',                         'binary_upgrade', 'pg_toast') AND       c.oid >= 16384::pg_catalog.oid) OR      (n.nspname = 'pg_catalog' AND       relname IN ('pg_largeobject') ))),   toast_heap (reloid, indtable, toastheap) AS (   SELECT c.reltoastrelid, 0::oid, c.oid   FROM regular_heap JOIN pg_catalog.pg_class c       ON regular_heap.reloid = c.oid   WHERE c.reltoastrelid != 0),   all_index (reloid, indtable, toastheap) AS (   SELECT indexrelid, indrelid, 0::oid   FROM pg_catalog.pg_index   WHERE indisvalid AND indisready     AND indrelid IN         (SELECT reloid FROM regular_heap          UNION ALL          SELECT reloid FROM toast_heap)) SELECT all_rels.*, n.nspname, c.relname,   c.relfilenode, c.reltablespace, pg_catalog.pg_tablespace_location(t.oid) AS spclocation FROM (SELECT * FROM regular_heap       UNION ALL       SELECT * FROM toast_heap       UNION ALL       SELECT * FROM all_index) all_rels   JOIN pg_catalog.pg_class c       ON all_rels.reloid = c.oid   JOIN pg_catalog.pg_namespace n      ON c.relnamespace = n.oid   LEFT OUTER JOIN pg_catalog.pg_tablespace t      ON c.reltablespace = t.oid ORDER BY 1;
+
+target databases:
+Database: postgres
+relname: pg_catalog.pg_largeobject: reloid: 2613 reltblspace: 
+relname: pg_catalog.pg_largeobject_loid_pn_index: reloid: 2683 reltblspace: 
+
+
+Database: template1
+relname: pg_catalog.pg_largeobject: reloid: 2613 reltblspace: 
+relname: pg_catalog.pg_largeobject_loid_pn_index: reloid: 2683 reltblspace: 
+
+
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+Checking for presence of required libraries                 ok
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+Checking database user is the install user                  executing: SELECT rolsuper, oid FROM pg_catalog.pg_roles WHERE rolname = current_user AND rolname !~ '^pg_'
+executing: SELECT COUNT(*) FROM pg_catalog.pg_roles WHERE rolname !~ '^pg_'
+ok
+executing: SELECT pg_catalog.set_config('search_path', '', false);
+Checking for prepared transactions                          executing: SELECT * FROM pg_catalog.pg_prepared_xacts
+ok
+Checking for new cluster tablespace directories             ok
+
+If pg_upgrade fails after this point, you must re-initdb the
+new cluster before continuing.
+
+Performing Upgrade
+------------------
+Analyzing all rows in the new cluster                       "/Applications/Postgres.app/Contents/Versions/14/bin/vacuumdb" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --all --analyze --verbose >> "pg_upgrade_utility.log" 2>&1
+ok
+Freezing all rows in the new cluster                        "/Applications/Postgres.app/Contents/Versions/14/bin/vacuumdb" --host /Users/megatron/Documents/clojure-land/meshanka --port 50432 --username megatron --all --freeze --verbose >> "pg_upgrade_utility.log" 2>&1
+ok
+"/Applications/Postgres.app/Contents/Versions/14/bin/pg_ctl" -w -D "/Users/megatron/Library/ApplicationSupport/Postgres/var-14" -o "" -m smart stop >> "pg_upgrade_server.log" 2>&1
+Deleting files from new pg_xact                             ok
+Copying old pg_xact to new server                           cp -Rf "/Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact" "/Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact" >> "pg_upgrade_utility.log" 2>&1
+
+*failure*
+There were problems executing "cp -Rf "/Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact" "/Users/megatron/Library/ApplicationSupport/Postgres/var-14/pg_xact" >> "pg_upgrade_utility.log" 2>&1"
+Consult the last few lines of "pg_upgrade_utility.log" for
+the probable cause of the failure.
